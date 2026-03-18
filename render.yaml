@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: django-porfolio
+    runtime: python
+    runtimeVersion: 3.10.5
+    buildCommand: bash build.sh
+    startCommand: gunicorn django_porfolio.wsgi --log-file -
+    envVars:
+      - key: DATABASE_URL
+        scope: run
+      - key: SECRET_KEY
+        scope: run
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: PYTHON_VERSION
+        value: 3.10.5
