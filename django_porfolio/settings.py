@@ -27,15 +27,36 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-6d3m-)2_ld&v#1$t=gyijf#177
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com').split(',')
-# Strip whitespace from host entries
-ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
+# ALLOWED_HOSTS configuration - flexible for different environments
+ALLOWED_HOSTS_ENV = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com,orinchan.onrender.com')
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',')]
+
+# Add wildcard for any onrender domain in production
+if not DEBUG:
+    ALLOWED_HOSTS.extend([
+        '*.onrender.com',
+        'orinchan.onrender.com',
+    ])
+    # Remove duplicates
+    ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 # CSRF and Security Settings for Production
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
-SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
-CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
+CSRF_TRUSTED_ORIGINS_ENV = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://*.onrender.com,https://orinchan.onrender.com')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in CSRF_TRUSTED_ORIGINS_ENV.split(',') if origin.strip()]
+
+# Add production origins
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS.extend([
+        'https://*.onrender.com',
+        'https://orinchan.onrender.com',
+    ])
+    # Remove duplicates
+    CSRF_TRUSTED_ORIGINS = list(set(CSRF_TRUSTED_ORIGINS))
+
+# SSL and Cookie Security
+SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True' or not DEBUG
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True' or not DEBUG
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True' or not DEBUG
 
 
 # Application definition
