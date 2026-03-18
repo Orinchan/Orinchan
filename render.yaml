@@ -2,9 +2,9 @@ services:
   - type: web
     name: django-porfolio
     runtime: python
-    runtimeVersion: 3.10.5
+    runtimeVersion: 3.11
     buildCommand: bash build.sh
-    startCommand: gunicorn django_porfolio.wsgi --log-file -
+    startCommand: gunicorn django_porfolio.wsgi:application --log-file -
     envVars:
       - key: DATABASE_URL
         scope: run
