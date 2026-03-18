@@ -14,5 +14,13 @@ services:
         value: false
       - key: ALLOWED_HOSTS
         value: .onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://*.onrender.com
+      - key: SECURE_SSL_REDIRECT
+        value: true
+      - key: SESSION_COOKIE_SECURE
+        value: true
+      - key: CSRF_COOKIE_SECURE
+        value: true
       - key: PYTHON_VERSION
         value: 3.10.5
