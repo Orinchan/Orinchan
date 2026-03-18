@@ -106,21 +106,38 @@ WSGI_APPLICATION = 'django_porfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if os.getenv('DATABASE_URL'):
+# Production: Force PostgreSQL, Development: Use SQLite3
+if not DEBUG:
+    # Production environment - MUST use PostgreSQL
     import dj_database_url
+    if not os.getenv('DATABASE_URL'):
+        raise Exception(
+            "CRITICAL: DATABASE_URL environment variable is not set. "
+            "PostgreSQL connection URL is required in production. "
+            "Add it to Render's Environment Variables."
+        )
     DATABASES = {
         'default': dj_database_url.config(
             default=os.getenv('DATABASE_URL'),
-            conn_max_age=600
+            conn_max_age=600,
+            conn_health_checks=True,
         )
     }
 else:
+    # Development environment - Use SQLite3
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# Debug output for database configuration
+import sys
+if 'runserver' in sys.argv or 'collectstatic' in sys.argv:
+    print(f"[DEBUG] DEBUG={DEBUG}")
+    print(f"[DEBUG] DATABASE_URL={os.getenv('DATABASE_URL', 'NOT SET')}")
+    print(f"[DEBUG] Using: {DATABASES['default']['ENGINE']}")
 
 
 # Password validation
