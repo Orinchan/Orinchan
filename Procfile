@@ -1,1 +1,1 @@
-web: gunicorn django_porfolio.wsgi:application --log-file -
+web: gunicorn -c gunicorn_config.py django_porfolio.wsgi:application

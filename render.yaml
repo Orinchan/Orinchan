@@ -4,7 +4,7 @@ services:
     runtime: python
     runtimeVersion: 3.11.0
     buildCommand: bash build.sh
-    startCommand: gunicorn django_porfolio.wsgi:application --workers 4 --worker-class sync --bind 0.0.0.0 --log-file -
+    startCommand: gunicorn -c gunicorn_config.py django_porfolio.wsgi:application
     envVars:
       - key: DATABASE_URL
         scope: run
