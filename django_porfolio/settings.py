@@ -1,3 +1,5 @@
+
+
 """
 Django settings for django_porfolio project.
 
