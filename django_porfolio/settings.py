@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,23 +23,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-6d3m-)2_ld&v#1$t=gyijf#177o=5oxev&85ugucux*z0*n3o%')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'tu clave secreta')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = 'RENDER' not in os.environ
 
 # ALLOWED_HOSTS configuration - flexible for different environments
 ALLOWED_HOSTS_ENV = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com,orinchan.onrender.com')
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',')]
 
-# Add wildcard for any onrender domain in production
-if not DEBUG:
-    ALLOWED_HOSTS.extend([
-        '*.onrender.com',
-        'orinchan.onrender.com',
-    ])
-    # Remove duplicates
-    ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
+# https://docs.djangoproject.com/en/3.0/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 # CSRF and Security Settings for Production
 CSRF_TRUSTED_ORIGINS_ENV = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://*.onrender.com,https://orinchan.onrender.com')
@@ -175,6 +176,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if not DEBUG:
+    # In production, use WhiteNoise to serve static files
+    STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
