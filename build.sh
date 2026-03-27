@@ -22,7 +22,7 @@ fi
 echo "4) Collecting static files"
 python manage.py collectstatic --no-input
 
-manage.py makemigrations
+python manage.py makemigrations
 
 echo "5) Running migrations"
 python manage.py migrate --no-input
