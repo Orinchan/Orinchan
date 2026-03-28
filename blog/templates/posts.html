@@ -163,6 +163,14 @@
             flex-grow: 1;
             line-height: 1.8;
         }
+
+        .blog-post-description p {
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-description p:last-child {
+            margin-bottom: 0;
+        }
         
         .btn-read-more {
             background: linear-gradient(135deg, #64c8ff, #a8e6ff);
@@ -329,8 +337,8 @@
                         {{ post.date|date:"d de F de Y" }}
                     </div>
                     <h2 class="blog-post-title">{{ post.title }}</h2>
-                    <p class="blog-post-description">{{ post.description }}</p>
-                    <a href="#" class="btn-read-more">
+                    <div class="blog-post-description">{{ post.description|truncatewords:38|linebreaks }}</div>
+                    <a href="{% url 'post_detail' post.id %}" class="btn-read-more">
                         <i class="bi bi-arrow-right"></i> Leer más
                     </a>
                 </div>

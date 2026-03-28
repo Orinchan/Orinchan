@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Post, Contact
 
@@ -6,8 +6,21 @@ from .models import Post, Contact
 
 
 def render_posts(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-date')
     return render(request, "posts.html", {'posts': posts})
+
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    recent_posts = Post.objects.exclude(pk=post.pk).order_by('-date')[:3]
+    return render(
+        request,
+        "post_detail.html",
+        {
+            'post': post,
+            'recent_posts': recent_posts,
+        }
+    )
 
 
 def contact_view(request):
