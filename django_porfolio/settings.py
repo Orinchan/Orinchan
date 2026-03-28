@@ -30,13 +30,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-6d3m-)2_ld&v#1$t=gyijf#177
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS configuration - flexible for different environments
-ALLOWED_HOSTS_ENV = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com,orinchan.onrender.com')
+ALLOWED_HOSTS_ENV = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com,orinchan.onrender.com')
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',')]
 
 # Add wildcard for any onrender domain in production
 if not DEBUG:
     ALLOWED_HOSTS.extend([
-        '*.onrender.com',
+        '.onrender.com',
         'orinchan.onrender.com',
     ])
     # Remove duplicates
@@ -133,14 +133,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
-# Debug output for database configuration
-import sys
-if 'runserver' in sys.argv or 'collectstatic' in sys.argv:
-    print(f"[DEBUG] DEBUG={DEBUG}")
-    print(f"[DEBUG] DATABASE_URL={os.getenv('DATABASE_URL', 'NOT SET')}")
-    print(f"[DEBUG] Using: {DATABASES['default']['ENGINE']}")
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

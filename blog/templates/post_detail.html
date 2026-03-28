@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, rgba(100, 200, 255, 0.22), transparent 30%),
+                linear-gradient(160deg, #09111f 0%, #15243d 45%, #0d172b 100%);
+            color: #f3f7fb;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        .navbar {
+            background: rgba(9, 17, 31, 0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(140, 209, 255, 0.16);
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #f3f7fb !important;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 110px 20px 60px;
+        }
+
+        .post-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2.3fr) minmax(280px, 0.9fr);
+            gap: 28px;
+            align-items: start;
+        }
+
+        .post-card,
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(140, 209, 255, 0.16);
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(14px);
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 34px 34px 24px;
+        }
+
+        .post-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(100, 200, 255, 0.12);
+            color: #9ddfff;
+            border: 1px solid rgba(100, 200, 255, 0.28);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+
+        .post-title {
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 1.08;
+            margin-bottom: 12px;
+        }
+
+        .post-subtitle {
+            color: rgba(243, 247, 251, 0.72);
+            font-size: 1.06rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 460px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .post-content {
+            padding: 34px;
+            color: rgba(243, 247, 251, 0.88);
+            font-size: 1.05rem;
+            line-height: 1.95;
+        }
+
+        .post-content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .post-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .sidebar-card {
+            padding: 24px;
+            position: sticky;
+            top: 96px;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            color: #9ddfff;
+        }
+
+        .recent-link {
+            display: block;
+            padding: 14px 0;
+            text-decoration: none;
+            color: #f3f7fb;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .recent-link:first-of-type {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .recent-link:hover .recent-title {
+            color: #9ddfff;
+        }
+
+        .recent-title {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            transition: color 0.25s ease;
+        }
+
+        .recent-date {
+            color: rgba(243, 247, 251, 0.56);
+            font-size: 0.92rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 22px;
+            color: #9ddfff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #d9f3ff;
+        }
+
+        @media (max-width: 960px) {
+            .post-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .post-header,
+            .post-content,
+            .sidebar-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Portafolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'posts' %}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-shell">
+        <div class="post-layout">
+            <article class="post-card">
+                <header class="post-header">
+                    <div class="post-badge">
+                        <i class="bi bi-calendar-event"></i>
+                        {{ post.date|date:"d de F de Y" }}
+                    </div>
+                    <h1 class="post-title">{{ post.title }}</h1>
+                    <p class="post-subtitle">El contenido se actualiza directamente desde el panel de administración.</p>
+                </header>
+
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+                {% endif %}
+
+                <section class="post-content">
+                    {{ post.description|linebreaks }}
+                </section>
+            </article>
+
+            <aside class="sidebar-card">
+                <h2 class="sidebar-title">Más publicaciones</h2>
+                {% for recent_post in recent_posts %}
+                <a href="{% url 'post_detail' recent_post.id %}" class="recent-link">
+                    <span class="recent-title">{{ recent_post.title }}</span>
+                    <span class="recent-date">{{ recent_post.date|date:"d/m/Y" }}</span>
+                </a>
+                {% empty %}
+                <p class="recent-date">Aún no hay más publicaciones.</p>
+                {% endfor %}
+
+                <a href="{% url 'posts' %}" class="back-link">
+                    <i class="bi bi-arrow-left"></i>
+                    Volver al blog
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
